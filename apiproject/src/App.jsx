@@ -1,31 +1,34 @@
 
-import React from 'react';
-import axios from "./axiosConfig";
-import { useEffect } from 'react';
+import React, { useEffect, useState } from 'react'
 
-const App = () => {
-  async function apicall() {
-    const response = await fetch(
-      "https://official-joke-api.appspot.com/random_joke"
-    );
-    const data = await response.json();
-    console.log(data)  
-  }
-  async function apicall() {
-    const response = await axios.get("/random_joke");
-    console.log(response.data)  
-  }
-  
+
+function App() {
+
+  const [posts, setPosts] = useState([])
+
   useEffect(()=>{
-    apicall();
+    fetch('https://jsonplaceholder.typicode.com/posts')
+    .then(response => response.json())
+    .then(posts => setPosts(posts.splice(0,10)))
+
   },[])
 
   return (
-    <div>
-    <h1>Joke Api</h1>
-    <button onClick={apicall}>Click Here</button>
+    <div className="App">
+      <h1 className="bg-primary text-white">Fetch API Data</h1>
+      <div>
+        {
+          posts.map((post) => (
+            <div key={post.id} className='bg-dark'>  
+              <h1>{post.title}</h1>
+              <p>{post.body}</p>
+            </div>
+          ))
+        }
+      </div>
     </div>
-  )
+  );
+  
 }
 
 export default App
